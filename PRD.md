@@ -13,11 +13,18 @@ This is a multi-view application managing real-time GitHub data, AI agent states
 ## Essential Features
 
 ### Repository Dashboard
-- **Functionality**: Display overview of connected repositories with issue/PR counts, deployment status, and recent bot activity
-- **Purpose**: Provide at-a-glance system health and activity monitoring
-- **Trigger**: User navigates to dashboard (default view)
-- **Progression**: Load repos → Display cards with stats → Show active deployments → Enable drill-down to details
-- **Success criteria**: All connected repositories displayed with accurate real-time stats, <2s load time
+- **Functionality**: Display overview of connected repositories with issue/PR counts, deployment status, and recent bot activity. Click on any repository to open a dedicated management screen with chat interface
+- **Purpose**: Provide at-a-glance system health and activity monitoring with drill-down capability
+- **Trigger**: User navigates to dashboard (default view) or clicks on repository card
+- **Progression**: Load repos → Display cards with stats → Show active deployments → Click repository → Navigate to management screen with chat interface
+- **Success criteria**: All connected repositories displayed with accurate real-time stats, <2s load time, smooth navigation to repository detail view
+
+### Repository Management Screen
+- **Functionality**: Dedicated management interface for individual repositories with conversational AI chat, issue management, quick actions, and settings. Chat history persists per repository
+- **Purpose**: Provide focused repository management with AI assistance for triaging, deployments, workflow questions, and repository analysis
+- **Trigger**: User clicks on repository card from dashboard
+- **Progression**: Click repository → Load management screen → View repository stats → Chat with AI assistant → Execute actions → Return to dashboard
+- **Success criteria**: Chat responses within 10s, conversation history persists across sessions, repository context included in AI responses, smooth navigation flow
 
 ### AI Agent Activity Feed
 - **Functionality**: Real-time stream of bot actions (triages, comments, workflow dispatches) with reasoning

@@ -6,12 +6,16 @@ import { mockRepositories, mockActivities } from '@/lib/mock-data'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useGitHub } from '@/lib/github-context'
 import { fetchAllActivities } from '@/lib/github'
-import { Activity } from '@/lib/types'
+import { Activity, Repository } from '@/lib/types'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Info } from '@phosphor-icons/react'
 
-export function DashboardTab() {
+interface DashboardTabProps {
+  onRepositoryClick: (repository: Repository) => void
+}
+
+export function DashboardTab({ onRepositoryClick }: DashboardTabProps) {
   const { repositories, isConnected, isLoading } = useGitHub()
   const [activities, setActivities] = useState<Activity[]>([])
   const [activitiesLoading, setActivitiesLoading] = useState(false)
@@ -60,7 +64,9 @@ export function DashboardTab() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayRepos.map((repo) => (
-              <RepositoryCard key={repo.id} repository={repo} />
+              <div key={repo.id} onClick={() => onRepositoryClick(repo)} className="cursor-pointer">
+                <RepositoryCard repository={repo} />
+              </div>
             ))}
           </div>
         )}

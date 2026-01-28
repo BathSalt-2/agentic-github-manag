@@ -6,14 +6,17 @@ import { AuditTab } from './components/audit-tab'
 import { SettingsTab } from './components/settings-tab'
 import { TriageTab } from './components/triage-tab'
 import { GitHubConnectionDialog } from './components/github-connection-dialog'
+import { RepositoryManagement } from './components/repository-management'
 import { Robot, Rocket, Clock, Gear, House, GithubLogo, SignOut, ListChecks } from '@phosphor-icons/react'
 import { Toaster } from '@/components/ui/sonner'
 import { GitHubProvider, useGitHub } from './lib/github-context'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Repository } from './lib/types'
 
 function AppContent() {
   const [connectionDialogOpen, setConnectionDialogOpen] = useState(false)
+  const [selectedRepository, setSelectedRepository] = useState<Repository | null>(null)
   const { isConnected, disconnect, repositories } = useGitHub()
 
   return (
@@ -59,50 +62,57 @@ function AppContent() {
       </header>
 
       <main className="container mx-auto px-6 py-8">
-        <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full max-w-3xl grid-cols-5 mx-auto">
-            <TabsTrigger value="dashboard" className="gap-2">
-              <House size={18} weight="duotone" />
-              <span className="hidden sm:inline">Dashboard</span>
-            </TabsTrigger>
-            <TabsTrigger value="triage" className="gap-2">
-              <ListChecks size={18} weight="duotone" />
-              <span className="hidden sm:inline">Triage</span>
-            </TabsTrigger>
-            <TabsTrigger value="deployments" className="gap-2">
-              <Rocket size={18} weight="duotone" />
-              <span className="hidden sm:inline">Deploys</span>
-            </TabsTrigger>
-            <TabsTrigger value="audit" className="gap-2">
-              <Clock size={18} weight="duotone" />
-              <span className="hidden sm:inline">Audit</span>
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="gap-2">
-              <Gear size={18} weight="duotone" />
-              <span className="hidden sm:inline">Settings</span>
-            </TabsTrigger>
-          </TabsList>
+        {selectedRepository ? (
+          <RepositoryManagement 
+            repository={selectedRepository} 
+            onBack={() => setSelectedRepository(null)} 
+          />
+        ) : (
+          <Tabs defaultValue="dashboard" className="space-y-6">
+            <TabsList className="grid w-full max-w-3xl grid-cols-5 mx-auto">
+              <TabsTrigger value="dashboard" className="gap-2">
+                <House size={18} weight="duotone" />
+                <span className="hidden sm:inline">Dashboard</span>
+              </TabsTrigger>
+              <TabsTrigger value="triage" className="gap-2">
+                <ListChecks size={18} weight="duotone" />
+                <span className="hidden sm:inline">Triage</span>
+              </TabsTrigger>
+              <TabsTrigger value="deployments" className="gap-2">
+                <Rocket size={18} weight="duotone" />
+                <span className="hidden sm:inline">Deploys</span>
+              </TabsTrigger>
+              <TabsTrigger value="audit" className="gap-2">
+                <Clock size={18} weight="duotone" />
+                <span className="hidden sm:inline">Audit</span>
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="gap-2">
+                <Gear size={18} weight="duotone" />
+                <span className="hidden sm:inline">Settings</span>
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="dashboard">
-            <DashboardTab />
-          </TabsContent>
+            <TabsContent value="dashboard">
+              <DashboardTab onRepositoryClick={setSelectedRepository} />
+            </TabsContent>
 
-          <TabsContent value="triage">
-            <TriageTab />
-          </TabsContent>
+            <TabsContent value="triage">
+              <TriageTab />
+            </TabsContent>
 
-          <TabsContent value="deployments">
-            <DeploymentsTab />
-          </TabsContent>
+            <TabsContent value="deployments">
+              <DeploymentsTab />
+            </TabsContent>
 
-          <TabsContent value="audit">
-            <AuditTab />
-          </TabsContent>
+            <TabsContent value="audit">
+              <AuditTab />
+            </TabsContent>
 
-          <TabsContent value="settings">
-            <SettingsTab />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="settings">
+              <SettingsTab />
+            </TabsContent>
+          </Tabs>
+        )}
       </main>
 
       <GitHubConnectionDialog 
