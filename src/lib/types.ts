@@ -49,3 +49,33 @@ export interface AuditEvent {
   details: string
   result: 'success' | 'failed'
 }
+
+export type MergeStrategy = 'merge' | 'squash' | 'rebase'
+
+export interface UserPreferences {
+  autoTriage: boolean
+  requireTemplates: boolean
+  autoRollback: boolean
+  autoMerge: boolean
+  mergeStrategy: MergeStrategy
+  minApprovals: number
+  prodApprovals: number
+  notifications: {
+    deployments: boolean
+    failures: boolean
+    approvals: boolean
+  }
+}
+
+export interface WorkflowCommand {
+  id: string
+  name: string
+  command: string
+  description: string
+  requiresApproval: boolean
+  enabled: boolean
+}
+
+export interface WorkflowConfig {
+  commands: WorkflowCommand[]
+}

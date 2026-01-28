@@ -48,11 +48,11 @@ This is a multi-view application managing real-time GitHub data, AI agent states
 - **Success criteria**: Search returns results <1s, events retained for 90 days minimum
 
 ### Configuration Panel
-- **Functionality**: Manage bot behavior, permissions, workflow mappings, and notification settings
-- **Purpose**: Customize system behavior per repository without code changes
+- **Functionality**: Manage bot behavior, permissions, workflow mappings, notification settings, and custom slash commands with persistent storage
+- **Purpose**: Customize system behavior per repository without code changes, with all settings persisted between sessions using the Spark KV store
 - **Trigger**: User navigates to Settings
-- **Progression**: View current config → Edit settings → Validate → Save → Sync to GitHub App
-- **Success criteria**: Settings persist correctly, changes take effect within 30s
+- **Progression**: View current config → Edit settings in Preferences or Workflows tab → Changes auto-save → Settings persist across sessions
+- **Success criteria**: Settings persist correctly across page refreshes, changes take effect immediately, custom workflow commands can be created/edited/deleted
 
 ## Edge Case Handling
 
