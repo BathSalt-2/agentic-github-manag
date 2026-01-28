@@ -1,6 +1,7 @@
 import { Card } from '@/components/ui/card'
 import { IssueTemplateGenerator } from './issue-template-generator'
-import { Sparkle, ListChecks, FileText, Robot } from '@phosphor-icons/react'
+import { BatchTemplateGenerator } from './batch-template-generator'
+import { Sparkle, ListChecks, FileText, Robot, Stack } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -47,15 +48,26 @@ export function IssueTemplateCard({ repoFullName }: Props) {
           </div>
         </div>
 
-        <IssueTemplateGenerator 
-          repoFullName={repoFullName}
-          trigger={
-            <Button className="w-full gap-2">
-              <Sparkle size={18} weight="duotone" />
-              Generate Issue Template
-            </Button>
-          }
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <IssueTemplateGenerator 
+            repoFullName={repoFullName}
+            trigger={
+              <Button className="gap-2 w-full">
+                <Sparkle size={18} weight="duotone" />
+                Single Template
+              </Button>
+            }
+          />
+          <BatchTemplateGenerator 
+            repoFullName={repoFullName}
+            trigger={
+              <Button variant="outline" className="gap-2 w-full">
+                <Stack size={18} weight="duotone" />
+                Batch Generate
+              </Button>
+            }
+          />
+        </div>
       </div>
     </Card>
   )

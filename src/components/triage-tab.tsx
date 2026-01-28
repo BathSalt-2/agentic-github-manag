@@ -13,6 +13,7 @@ import { Robot, Tag, ChatCircle, ArrowSquareOut, CheckCircle, Info, CheckSquare,
 import { fetchRepositoryIssuesForTriage, addLabelsToIssue, createIssueComment } from '@/lib/github'
 import { analyzeIssueWithAI, batchAnalyzeIssues } from '@/lib/ai-triage'
 import { IssueTemplateGenerator } from './issue-template-generator'
+import { BatchTemplateGenerator } from './batch-template-generator'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
@@ -258,12 +259,21 @@ export function TriageTab() {
             trigger={
               <Button variant="outline" className="gap-2">
                 <Sparkle size={18} weight="duotone" />
-                <span className="hidden sm:inline">Generate Template</span>
+                <span className="hidden sm:inline">Single</span>
+              </Button>
+            }
+          />
+          <BatchTemplateGenerator 
+            repoFullName={repositories[0]?.fullName}
+            trigger={
+              <Button variant="outline" className="gap-2">
+                <Sparkle size={18} weight="duotone" />
+                <span className="hidden sm:inline">Batch</span>
               </Button>
             }
           />
           <Button onClick={loadIssues} disabled={loading} variant="outline">
-            {loading ? 'Loading...' : 'Refresh Issues'}
+            {loading ? 'Loading...' : 'Refresh'}
           </Button>
         </div>
       </div>

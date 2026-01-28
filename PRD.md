@@ -34,11 +34,11 @@ This is a multi-view application managing real-time GitHub data, AI agent states
 - **Success criteria**: AI analysis completes within 10s per issue, bulk operations process 10+ issues efficiently with progress feedback, suggestions are relevant and accurate >80% of the time, labels and comments successfully applied to GitHub issues, selection state persists during operations
 
 ### Smart Issue Templates
-- **Functionality**: Generate comprehensive, pre-filled issue templates using AI based on user input. Supports multiple issue types (bug, feature, documentation, performance, security, question) with structured formats
-- **Purpose**: Accelerate issue creation with high-quality, consistent formatting and complete information, reducing back-and-forth between reporters and maintainers
-- **Trigger**: User clicks "Generate Issue Template" button from Dashboard or Triage tab
-- **Progression**: Open generator dialog → Select issue type → Describe issue briefly → Add optional context → AI generates complete template with title, body, labels, assignees → Review template → Copy to clipboard OR open directly in GitHub with pre-filled data
-- **Success criteria**: Template generated within 10s, output includes well-structured markdown body following best practices, suggested labels are relevant, direct GitHub integration pre-fills issue form correctly
+- **Functionality**: Generate comprehensive, pre-filled issue templates using AI based on user input. Supports multiple issue types (bug, feature, documentation, performance, security, question) with structured formats. Includes both single template generation and batch template generation for creating multiple related issues at once
+- **Purpose**: Accelerate issue creation with high-quality, consistent formatting and complete information, reducing back-and-forth between reporters and maintainers. Batch mode enables efficient creation of multiple related issues from a backlog or planning session
+- **Trigger**: User clicks "Single Template" or "Batch Generate" button from Dashboard or Triage tab
+- **Progression**: (Single) Open generator dialog → Select issue type → Describe issue briefly → Add optional context → AI generates complete template with title, body, labels, assignees → Review template → Copy to clipboard OR open directly in GitHub with pre-filled data. (Batch) Open generator → Add multiple issues (manual entry or quick paste format) → AI generates all templates with progress tracking → Review all results → Copy individual or all templates → Open each in GitHub
+- **Success criteria**: Single templates generated within 10s, batch operations process efficiently with progress feedback, output includes well-structured markdown body following best practices, suggested labels are relevant, direct GitHub integration pre-fills issue form correctly, batch mode handles 10+ issues with progress indication
 
 ### Deployment Console
 - **Functionality**: View active deployments, trigger new deploys, approve pending actions, rollback
