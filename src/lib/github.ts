@@ -293,3 +293,32 @@ export async function fetchRepositoryIssuesForTriage(owner: string, repo: string
       created_at: issue.created_at
     }))
 }
+
+export async function fetchRecentIssuesForContext(owner: string, repo: string, limit: number = 10) {
+  const octokit = getOctokit()
+  
+  const { data } = await octokit.request('GET /repos/{owner}/{repo}/issues', {
+    owner,
+    repo,
+    state: 'open',
+    per_page: limit,
+    sort: 'created',
+    direction: 'desc'
+  })
+
+  return data
+    .filter(issue => !issue.pull_request)
+    .map(issue => ({
+      number: issue.number,
+      title: issue.title,
+      body: (issue.body || '').substring(0, 500),
+      state: issue.state,
+      labels: issue.labels.map((label: any) => 
+        typeof label === 'string' ? label : label.name
+      ),
+      created_at: issue.created_at,
+      updated_at: issue.updated_at,
+      comments: issue.comments,
+      html_url: issue.html_url
+    }))
+}

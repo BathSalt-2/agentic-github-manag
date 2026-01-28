@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { ChatInterface, ChatMessage } from './chat-interface'
 import { Repository } from '@/lib/types'
+import { fetchRecentIssuesForContext, isGitHubConnected } from '@/lib/github'
 import { 
   ArrowLeft, 
   GitBranch, 
@@ -16,7 +17,8 @@ import {
   Clock,
   Gear,
   ChatCircle,
-  ListChecks
+  ListChecks,
+  ArrowsClockwise
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
@@ -31,6 +33,30 @@ export function RepositoryManagement({ repository, onBack }: RepositoryManagemen
     []
   )
   const [isProcessing, setIsProcessing] = useState(false)
+  const [recentIssues, setRecentIssues] = useState<any[]>([])
+  const [isLoadingIssues, setIsLoadingIssues] = useState(false)
+  const [lastIssueRefresh, setLastIssueRefresh] = useState<Date | null>(null)
+
+  useEffect(() => {
+    loadRecentIssues()
+  }, [repository.fullName])
+
+  const loadRecentIssues = async () => {
+    if (!isGitHubConnected()) return
+
+    setIsLoadingIssues(true)
+    try {
+      const [owner, repo] = repository.fullName.split('/')
+      const issues = await fetchRecentIssuesForContext(owner, repo, 15)
+      setRecentIssues(issues)
+      setLastIssueRefresh(new Date())
+    } catch (error) {
+      console.error('Failed to load recent issues:', error)
+      setRecentIssues([])
+    } finally {
+      setIsLoadingIssues(false)
+    }
+  }
 
   const handleSendMessage = async (content: string) => {
     const userMessage: ChatMessage = {
@@ -52,19 +78,31 @@ export function RepositoryManagement({ repository, onBack }: RepositoryManagemen
     setIsProcessing(true)
 
     try {
-      const prompt = `You are an AI GitHub repository assistant helping manage the repository "${repository.fullName}".
+      const issueContext = recentIssues.length > 0 
+        ? `\n\nRecent Open Issues (${recentIssues.length} total):\n${recentIssues.map((issue, idx) => 
+            `${idx + 1}. Issue #${issue.number}: "${issue.title}"
+   Labels: ${issue.labels.length > 0 ? issue.labels.join(', ') : 'none'}
+   Comments: ${issue.comments}
+   Created: ${new Date(issue.created_at).toLocaleDateString()}
+   URL: ${issue.html_url}
+   ${issue.body ? `Preview: ${issue.body.substring(0, 150)}${issue.body.length > 150 ? '...' : ''}` : ''}`
+          ).join('\n\n')}`
+        : '\n\nNote: Real-time issue data is not available. Connect to GitHub to enable issue tracking.'
 
-The repository currently has:
+      const promptText = `You are an AI GitHub repository assistant helping manage the repository "${repository.fullName}".
+
+Repository Overview:
 - ${repository.openIssues} open issues
 - ${repository.openPRs} open pull requests  
 - ${repository.activeDeployments} active deployment(s)
 - Status: ${repository.status}
+${issueContext}
 
 User question: ${content}
 
-Provide a helpful, actionable response about repository management, issue triage, deployments, or workflows. Be specific and concise. If the user asks you to perform an action, explain what you would do and ask for confirmation.`
+Provide a helpful, actionable response about repository management, issue triage, deployments, or workflows. When discussing issues, reference them by their issue number (e.g., "Issue #123"). Be specific and concise. If the user asks you to perform an action, explain what you would do and ask for confirmation. If analyzing issues, prioritize based on factors like number of comments, lack of labels, and age.`
 
-      const response = await window.spark.llm(prompt, 'gpt-4o')
+      const response = await window.spark.llm(promptText, 'gpt-4o')
 
       setChatMessages((current) =>
         (current || []).map((msg) =>
@@ -95,6 +133,11 @@ Provide a helpful, actionable response about repository management, issue triage
   const handleClearChat = () => {
     setChatMessages([])
     toast.success('Chat history cleared')
+  }
+
+  const handleRefreshIssues = () => {
+    loadRecentIssues()
+    toast.success('Refreshing issue data...')
   }
 
   const currentMessages = chatMessages || []
@@ -208,12 +251,40 @@ Provide a helpful, actionable response about repository management, issue triage
               <p className="text-sm text-muted-foreground">
                 Ask questions and get help managing this repository
               </p>
+              {recentIssues.length > 0 && (
+                <div className="flex items-center gap-2 mt-2">
+                  <Badge variant="outline" className="text-xs">
+                    {recentIssues.length} recent issues loaded
+                  </Badge>
+                  {lastIssueRefresh && (
+                    <span className="text-xs text-muted-foreground">
+                      Updated {new Date(lastIssueRefresh).toLocaleTimeString()}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
-            {currentMessages.length > 0 && (
-              <Button variant="outline" size="sm" onClick={handleClearChat}>
-                Clear History
-              </Button>
-            )}
+            <div className="flex gap-2">
+              {isGitHubConnected() && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleRefreshIssues}
+                  disabled={isLoadingIssues}
+                >
+                  <ArrowsClockwise 
+                    size={16} 
+                    className={isLoadingIssues ? 'animate-spin' : ''} 
+                  />
+                  <span className="ml-2">Refresh Issues</span>
+                </Button>
+              )}
+              {currentMessages.length > 0 && (
+                <Button variant="outline" size="sm" onClick={handleClearChat}>
+                  Clear History
+                </Button>
+              )}
+            </div>
           </div>
           <div className="h-[600px]">
             <ChatInterface
@@ -221,6 +292,8 @@ Provide a helpful, actionable response about repository management, issue triage
               messages={currentMessages}
               onSendMessage={handleSendMessage}
               isProcessing={isProcessing}
+              issueDataAvailable={recentIssues.length > 0}
+              issueCount={recentIssues.length}
             />
           </div>
         </TabsContent>

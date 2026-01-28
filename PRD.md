@@ -20,11 +20,11 @@ This is a multi-view application managing real-time GitHub data, AI agent states
 - **Success criteria**: All connected repositories displayed with accurate real-time stats, <2s load time, smooth navigation to repository detail view
 
 ### Repository Management Screen
-- **Functionality**: Dedicated management interface for individual repositories with conversational AI chat, issue management, quick actions, and settings. Chat history persists per repository
-- **Purpose**: Provide focused repository management with AI assistance for triaging, deployments, workflow questions, and repository analysis
+- **Functionality**: Dedicated management interface for individual repositories with conversational AI chat that includes real-time GitHub issue data. Chat automatically loads recent open issues and includes them in the AI context for intelligent responses. Issue history persists per repository and can be refreshed on-demand
+- **Purpose**: Provide focused repository management with AI assistance for triaging, deployments, workflow questions, and repository analysis. AI can reference specific issues by number and provide context-aware recommendations based on actual repository state
 - **Trigger**: User clicks on repository card from dashboard
-- **Progression**: Click repository → Load management screen → View repository stats → Chat with AI assistant → Execute actions → Return to dashboard
-- **Success criteria**: Chat responses within 10s, conversation history persists across sessions, repository context included in AI responses, smooth navigation flow
+- **Progression**: Click repository → Load management screen → Fetch recent issues from GitHub API → View repository stats → Chat with AI assistant (with issue context) → Refresh issue data as needed → Execute actions → Return to dashboard
+- **Success criteria**: Chat responses within 10s, conversation history persists across sessions, real-time issue data loaded within 2s, repository context and issue details included in AI responses, smooth navigation flow, issue references (#123) highlighted in chat, refresh functionality updates issue data
 
 ### AI Agent Activity Feed
 - **Functionality**: Real-time stream of bot actions (triages, comments, workflow dispatches) with reasoning
