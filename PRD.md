@@ -27,11 +27,11 @@ This is a multi-view application managing real-time GitHub data, AI agent states
 - **Success criteria**: Events appear within 5s of occurrence, reasoning is clear and human-readable
 
 ### AI-Powered Issue Triage
-- **Functionality**: Analyze open issues across repositories using AI to suggest labels, priority levels, categories, and auto-generate helpful comments
-- **Purpose**: Automate the time-consuming task of triaging new issues, ensuring consistent and thoughtful responses while maintaining quality
-- **Trigger**: User navigates to Triage tab, clicks "Analyze with AI" on individual issues
-- **Progression**: Load open issues → Select issue → Click analyze → AI analyzes title/body → Display suggested labels/priority/category/comment with reasoning → Review suggestions → Apply triage (adds labels and posts comment to GitHub)
-- **Success criteria**: AI analysis completes within 10s, suggestions are relevant and accurate >80% of the time, labels and comments successfully applied to GitHub issues
+- **Functionality**: Analyze open issues across repositories using AI to suggest labels, priority levels, categories, and auto-generate helpful comments. Supports bulk processing of multiple issues simultaneously with progress tracking
+- **Purpose**: Automate the time-consuming task of triaging new issues at scale, ensuring consistent and thoughtful responses while maintaining quality across large issue backlogs
+- **Trigger**: User navigates to Triage tab, clicks "Analyze with AI" on individual issues or selects multiple issues and uses bulk actions
+- **Progression**: Load open issues → (Individual) Select issue → Click analyze → AI analyzes title/body → Display suggestions → Review → Apply triage OR (Bulk) Select multiple issues via checkboxes → Click "Analyze" → Progress bar shows batch processing → Review all analyses → Click "Apply" → Progress bar shows batch application → All triaged issues marked complete
+- **Success criteria**: AI analysis completes within 10s per issue, bulk operations process 10+ issues efficiently with progress feedback, suggestions are relevant and accurate >80% of the time, labels and comments successfully applied to GitHub issues, selection state persists during operations
 
 ### Deployment Console
 - **Functionality**: View active deployments, trigger new deploys, approve pending actions, rollback
