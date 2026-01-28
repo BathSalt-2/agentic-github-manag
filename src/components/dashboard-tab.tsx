@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { RepositoryCard } from './repository-card'
 import { ActivityItem } from './activity-item'
+import { IssueTemplateCard } from './issue-template-card'
 import { mockRepositories, mockActivities } from '@/lib/mock-data'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useGitHub } from '@/lib/github-context'
@@ -30,6 +31,10 @@ export function DashboardTab() {
 
   return (
     <div className="space-y-6">
+      {(isConnected && repositories.length > 0) && (
+        <IssueTemplateCard repoFullName={repositories[0]?.fullName} />
+      )}
+
       <div>
         <h2 className="text-2xl font-bold mb-4">Repositories</h2>
         

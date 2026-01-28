@@ -33,6 +33,13 @@ This is a multi-view application managing real-time GitHub data, AI agent states
 - **Progression**: Load open issues → (Individual) Select issue → Click analyze → AI analyzes title/body → Display suggestions → Review → Apply triage OR (Bulk) Select multiple issues via checkboxes → Click "Analyze" → Progress bar shows batch processing → Review all analyses → Click "Apply" → Progress bar shows batch application → All triaged issues marked complete
 - **Success criteria**: AI analysis completes within 10s per issue, bulk operations process 10+ issues efficiently with progress feedback, suggestions are relevant and accurate >80% of the time, labels and comments successfully applied to GitHub issues, selection state persists during operations
 
+### Smart Issue Templates
+- **Functionality**: Generate comprehensive, pre-filled issue templates using AI based on user input. Supports multiple issue types (bug, feature, documentation, performance, security, question) with structured formats
+- **Purpose**: Accelerate issue creation with high-quality, consistent formatting and complete information, reducing back-and-forth between reporters and maintainers
+- **Trigger**: User clicks "Generate Issue Template" button from Dashboard or Triage tab
+- **Progression**: Open generator dialog → Select issue type → Describe issue briefly → Add optional context → AI generates complete template with title, body, labels, assignees → Review template → Copy to clipboard OR open directly in GitHub with pre-filled data
+- **Success criteria**: Template generated within 10s, output includes well-structured markdown body following best practices, suggested labels are relevant, direct GitHub integration pre-fills issue form correctly
+
 ### Deployment Console
 - **Functionality**: View active deployments, trigger new deploys, approve pending actions, rollback
 - **Purpose**: Centralized deployment control with safety rails and approval workflows
