@@ -260,3 +260,36 @@ export async function triggerWorkflow(owner: string, repo: string, workflowId: s
     inputs
   })
 }
+
+export async function fetchRepositoryIssuesForTriage(owner: string, repo: string) {
+  const octokit = getOctokit()
+  
+  const { data } = await octokit.request('GET /repos/{owner}/{repo}/issues', {
+    owner,
+    repo,
+    state: 'open',
+    per_page: 50,
+    sort: 'created',
+    direction: 'desc'
+  })
+
+  return data
+    .filter(issue => !issue.pull_request)
+    .map(issue => ({
+      id: issue.id.toString(),
+      number: issue.number,
+      title: issue.title,
+      body: issue.body || '',
+      state: issue.state,
+      user: {
+        login: issue.user?.login || 'unknown',
+        avatar_url: issue.user?.avatar_url || ''
+      },
+      labels: issue.labels.map((label: any) => ({
+        name: typeof label === 'string' ? label : label.name,
+        color: typeof label === 'string' ? '000000' : label.color
+      })),
+      html_url: issue.html_url,
+      created_at: issue.created_at
+    }))
+}

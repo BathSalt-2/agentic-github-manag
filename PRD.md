@@ -26,6 +26,13 @@ This is a multi-view application managing real-time GitHub data, AI agent states
 - **Progression**: Stream events → Display action type → Show AI reasoning → Link to GitHub resource → Allow filtering
 - **Success criteria**: Events appear within 5s of occurrence, reasoning is clear and human-readable
 
+### AI-Powered Issue Triage
+- **Functionality**: Analyze open issues across repositories using AI to suggest labels, priority levels, categories, and auto-generate helpful comments
+- **Purpose**: Automate the time-consuming task of triaging new issues, ensuring consistent and thoughtful responses while maintaining quality
+- **Trigger**: User navigates to Triage tab, clicks "Analyze with AI" on individual issues
+- **Progression**: Load open issues → Select issue → Click analyze → AI analyzes title/body → Display suggested labels/priority/category/comment with reasoning → Review suggestions → Apply triage (adds labels and posts comment to GitHub)
+- **Success criteria**: AI analysis completes within 10s, suggestions are relevant and accurate >80% of the time, labels and comments successfully applied to GitHub issues
+
 ### Deployment Console
 - **Functionality**: View active deployments, trigger new deploys, approve pending actions, rollback
 - **Purpose**: Centralized deployment control with safety rails and approval workflows

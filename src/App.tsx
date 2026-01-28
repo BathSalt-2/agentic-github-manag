@@ -4,8 +4,9 @@ import { DashboardTab } from './components/dashboard-tab'
 import { DeploymentsTab } from './components/deployments-tab'
 import { AuditTab } from './components/audit-tab'
 import { SettingsTab } from './components/settings-tab'
+import { TriageTab } from './components/triage-tab'
 import { GitHubConnectionDialog } from './components/github-connection-dialog'
-import { Robot, Rocket, Clock, Gear, House, GithubLogo, SignOut } from '@phosphor-icons/react'
+import { Robot, Rocket, Clock, Gear, House, GithubLogo, SignOut, ListChecks } from '@phosphor-icons/react'
 import { Toaster } from '@/components/ui/sonner'
 import { GitHubProvider, useGitHub } from './lib/github-context'
 import { Button } from '@/components/ui/button'
@@ -59,14 +60,18 @@ function AppContent() {
 
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full max-w-2xl grid-cols-4 mx-auto">
+          <TabsList className="grid w-full max-w-3xl grid-cols-5 mx-auto">
             <TabsTrigger value="dashboard" className="gap-2">
               <House size={18} weight="duotone" />
               <span className="hidden sm:inline">Dashboard</span>
             </TabsTrigger>
+            <TabsTrigger value="triage" className="gap-2">
+              <ListChecks size={18} weight="duotone" />
+              <span className="hidden sm:inline">Triage</span>
+            </TabsTrigger>
             <TabsTrigger value="deployments" className="gap-2">
               <Rocket size={18} weight="duotone" />
-              <span className="hidden sm:inline">Deployments</span>
+              <span className="hidden sm:inline">Deploys</span>
             </TabsTrigger>
             <TabsTrigger value="audit" className="gap-2">
               <Clock size={18} weight="duotone" />
@@ -80,6 +85,10 @@ function AppContent() {
 
           <TabsContent value="dashboard">
             <DashboardTab />
+          </TabsContent>
+
+          <TabsContent value="triage">
+            <TriageTab />
           </TabsContent>
 
           <TabsContent value="deployments">
