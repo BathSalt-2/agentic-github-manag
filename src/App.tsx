@@ -1,12 +1,20 @@
+import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DashboardTab } from './components/dashboard-tab'
 import { DeploymentsTab } from './components/deployments-tab'
 import { AuditTab } from './components/audit-tab'
 import { SettingsTab } from './components/settings-tab'
-import { Robot, Rocket, Clock, Gear, House } from '@phosphor-icons/react'
+import { GitHubConnectionDialog } from './components/github-connection-dialog'
+import { Robot, Rocket, Clock, Gear, House, GithubLogo, SignOut } from '@phosphor-icons/react'
 import { Toaster } from '@/components/ui/sonner'
+import { GitHubProvider, useGitHub } from './lib/github-context'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 
-function App() {
+function AppContent() {
+  const [connectionDialogOpen, setConnectionDialogOpen] = useState(false)
+  const { isConnected, disconnect, repositories } = useGitHub()
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
@@ -19,9 +27,31 @@ function App() {
                 <p className="text-sm text-muted-foreground">AI-powered repository automation</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="h-2 w-2 bg-success rounded-full animate-pulse" />
-              <span className="text-sm text-muted-foreground">System Active</span>
+            <div className="flex items-center gap-4">
+              {isConnected ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 bg-success rounded-full animate-pulse" />
+                    <span className="text-sm text-muted-foreground">
+                      {repositories.length} {repositories.length === 1 ? 'repository' : 'repositories'}
+                    </span>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={disconnect}>
+                    <SignOut size={18} className="mr-2" />
+                    Disconnect
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Badge variant="outline" className="text-muted-foreground">
+                    Not connected
+                  </Badge>
+                  <Button size="sm" onClick={() => setConnectionDialogOpen(true)}>
+                    <GithubLogo size={18} weight="fill" className="mr-2" />
+                    Connect GitHub
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -66,8 +96,20 @@ function App() {
         </Tabs>
       </main>
 
+      <GitHubConnectionDialog 
+        open={connectionDialogOpen} 
+        onOpenChange={setConnectionDialogOpen}
+      />
       <Toaster />
     </div>
+  )
+}
+
+function App() {
+  return (
+    <GitHubProvider>
+      <AppContent />
+    </GitHubProvider>
   )
 }
 

@@ -48,11 +48,18 @@ This is a multi-view application managing real-time GitHub data, AI agent states
 - **Success criteria**: Search returns results <1s, events retained for 90 days minimum
 
 ### Configuration Panel
-- **Functionality**: Manage bot behavior, permissions, workflow mappings, notification settings, and custom slash commands with persistent storage
-- **Purpose**: Customize system behavior per repository without code changes, with all settings persisted between sessions using the Spark KV store
+- **Functionality**: Manage bot behavior, permissions, workflow mappings, notification settings, custom slash commands, and repository selection with persistent storage
+- **Purpose**: Customize system behavior per repository without code changes, with all settings persisted between sessions using the Spark KV store. Connect real GitHub repositories via Personal Access Token
 - **Trigger**: User navigates to Settings
-- **Progression**: View current config → Edit settings in Preferences or Workflows tab → Changes auto-save → Settings persist across sessions
-- **Success criteria**: Settings persist correctly across page refreshes, changes take effect immediately, custom workflow commands can be created/edited/deleted
+- **Progression**: Connect GitHub → Select repositories → Edit settings in Repositories/Preferences/Workflows tab → Changes auto-save → Settings persist across sessions
+- **Success criteria**: Settings persist correctly across page refreshes, changes take effect immediately, custom workflow commands can be created/edited/deleted, real GitHub data loads within 2s
+
+### GitHub Integration
+- **Functionality**: Connect to GitHub using Personal Access Token to fetch real repository data, issues, PRs, workflows, and deployments
+- **Purpose**: Transform the application from mock data to real-world repository management
+- **Trigger**: User clicks "Connect GitHub" button in header
+- **Progression**: Open dialog → Enter PAT → Validate connection → Fetch repositories → Display in dashboard → Enable real-time operations
+- **Success criteria**: Connection persists across sessions, API errors handled gracefully, rate limits respected, real data displayed accurately
 
 ## Edge Case Handling
 

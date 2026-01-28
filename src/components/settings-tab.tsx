@@ -11,7 +11,8 @@ import { defaultPreferences, defaultWorkflowConfig } from '@/lib/defaults'
 import { UserPreferences, WorkflowConfig, MergeStrategy } from '@/lib/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { WorkflowSettings } from './workflow-settings'
-import { Gear, Wrench } from '@phosphor-icons/react'
+import { RepositorySelector } from './repository-selector'
+import { Gear, Wrench, GithubLogo } from '@phosphor-icons/react'
 
 export function SettingsTab() {
   const [preferences, setPreferences] = useKV<UserPreferences>('user-preferences', defaultPreferences)
@@ -21,13 +22,16 @@ export function SettingsTab() {
   const currentWorkflow = workflowConfig || defaultWorkflowConfig
 
   const updatePreference = <K extends keyof UserPreferences>(key: K, value: UserPreferences[K]) => {
-    setPreferences({ ...currentPrefs, [key]: value })
+    setPreferences((current) => ({ ...(current || defaultPreferences), [key]: value }))
   }
 
   const updateNotification = (key: keyof UserPreferences['notifications'], value: boolean) => {
-    setPreferences({
-      ...currentPrefs,
-      notifications: { ...currentPrefs.notifications, [key]: value }
+    setPreferences((current) => {
+      const base = current || defaultPreferences
+      return {
+        ...base,
+        notifications: { ...base.notifications, [key]: value }
+      }
     })
   }
 
@@ -59,8 +63,12 @@ export function SettingsTab() {
         </Button>
       </div>
 
-      <Tabs defaultValue="preferences" className="w-full">
-        <TabsList className="grid w-full max-w-md grid-cols-2">
+      <Tabs defaultValue="repositories" className="w-full">
+        <TabsList className="grid w-full max-w-lg grid-cols-3">
+          <TabsTrigger value="repositories" className="gap-2">
+            <GithubLogo size={16} weight="duotone" />
+            Repositories
+          </TabsTrigger>
           <TabsTrigger value="preferences" className="gap-2">
             <Gear size={16} weight="duotone" />
             Preferences
@@ -70,6 +78,10 @@ export function SettingsTab() {
             Workflows
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="repositories" className="mt-6">
+          <RepositorySelector />
+        </TabsContent>
 
         <TabsContent value="preferences" className="space-y-6 mt-6">
           <Card>
